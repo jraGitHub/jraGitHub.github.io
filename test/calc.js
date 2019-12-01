@@ -179,4 +179,7 @@
     
 	var calc = myCalculator();
 	var calc2 = myCalculator('test');
+	var calc3 = myCalculator('test1');
+	var calc4 = myCalculator('test2');
+	var calc5 = myCalculator('test3');
 	
