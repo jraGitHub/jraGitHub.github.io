@@ -183,3 +183,4 @@
 	var calc4 = myCalculator('test2');
 	var calc5 = myCalculator('test3');
 	
+	
