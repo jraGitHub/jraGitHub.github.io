@@ -29,7 +29,7 @@
 			let strTable0 = "<div class='" + strClassName + "Functions'><table class='" + strClassName + "Functions'>[TABLE0ROWS]</table></div>";
 			let strTable1 = "<div class='" + strClassName + "Div1'><table class='" + strClassName + "Table1'>[TABLE1ROWS]</table></div>";
 			let strTable2 = "<div class='" + strClassName + "Div2'><table class='" + strClassName + "Table2'>[TABLE2ROWS]</table></div>";
-			let strCSS = "<style>." + strClassName + "Div1{float: left;}." + strClassName + "Div2{float: left;} ." + strClassName + "Buttons { width: 50px;} #" + strClassName + "Answer {width: 216px; }</style>";
+			let strCSS = "<style>." + strClassName + "Form{float: left;}." + strClassName + "Div1{float: left;}." + strClassName + "Div2{float: left;} ." + strClassName + "Buttons { width: 50px;} #" + strClassName + "Answer {width: 216px; }</style>";
 			let strTable0Rows = "";
 			let strTable1Rows = "";
 			let strTable2Rows = "";
@@ -178,5 +178,5 @@
 
     
 	var calc = myCalculator();
-	//var calc2 = myCalculator('test');
+	var calc2 = myCalculator('test');
 	
