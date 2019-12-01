@@ -1,4 +1,5 @@
 const elInputs = document.getElementsByClassName("inputs");
+
 function addListeners(arg){
     for(let i=0;i<arg.length;i++){
 		let buttonVal = arg[i].innerText;
