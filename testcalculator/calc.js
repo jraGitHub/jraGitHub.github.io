@@ -8,6 +8,8 @@
 		let strClassName = optStrClassName || "myCalculator";
 		let strCombinedValue = "";
 		let numTheAnswer = "";
+		let strLastOperator = "";
+		
 		
 		obj.strButtonClassName = strClassName + "Buttons";
 		obj.strContainerClassName = optStrContainerClassName || "body";
@@ -91,6 +93,9 @@
 		obj.appendToFormulaArray = function(strValue){
 			let objMyCalculator = this;
 			
+			//
+			// EQUAL KEYS
+			//
 			if (strValue === "="){
 				if(strCombinedValue != ""){
 					objMyCalculator.arrCalculations.push(strCombinedValue);
@@ -122,7 +127,10 @@
 				numTheAnswer = 0;
 				strCombinedValue = "";
 
-
+			//
+			//  OPERATOR KEYS
+			//
+			//
 			}else if (objMyCalculator.arrOperators.indexOf(strValue) >= 0){ 
 				// design flaw
 				if (strValue === "X"){
@@ -133,14 +141,23 @@
 				}
 				objMyCalculator.arrCalculations.push(strValue);
 				strCombinedValue = "";
-				
+			//
+			// FUNCTION KEYS
+			//
+			//
 			//}else if (objMyCalculator.arrFunctions.indexOf(strValue) >= 0){ 
 				// to do
-				
 			}else{
+				
+				// this is a new formula, lets clear the array and text box
+				if (strLastOperator == "="){ 
+				    objMyCalculator.arrCalculations = [];
+					document.getElementById(strClassName + "Answer").value = "";
+				}
 				strCombinedValue += strValue;
 				
 			}
+			strLastOperator = strValue;  
 		}
 		
 		//
@@ -168,6 +185,8 @@
 			// to do check is classname is passed
 			objMyCalculator.arrInputs = document.getElementsByClassName(objMyCalculator.strButtonClassName);
 			objMyCalculator.addListeners();
+			
+			
 		}
 		
 		
@@ -179,4 +198,36 @@
     
 	var calc = myCalculator();
 	
+	
+	
+	
+	//
+//
+//
+//
+
+	function myClassObject(optStrClassName, optStrContainerClassName){
+		let obj = new Object();
+        obj.version = "1.00 - 12/9/19"
+
+		obj.helloWorld = function(){
+			let objMyCalculator = this;
+			//alert('Hello!  version: ' + objMyCalculator.version);
+		}
+        				
+		//
+		//  init
+		//
+		obj.init = function(){
+			let objMyCalculator = this;
+			// do some init stuff
+		}	
+		
+		obj.init();
+		return obj;
+	}
+
+    
+	var obj = myClassObject();
+	obj.helloWorld();
 	
