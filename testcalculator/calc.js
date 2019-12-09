@@ -146,16 +146,17 @@
 						objMyCalculator.arrCalculations.pop();
 					}
 				}
-				
-				
+								
 				objMyCalculator.arrCalculations.push(strValue);
 				strCombinedValue = "";
+				
 			//
 			// FUNCTION KEYS
 			//
 			//
 			//}else if (objMyCalculator.arrFunctions.indexOf(strValue) >= 0){ 
 				// to do
+				
 			}else{
 				//
 				// NUMBER KEYS
