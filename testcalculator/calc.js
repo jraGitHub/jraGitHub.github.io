@@ -31,7 +31,7 @@
 			let strTable0 = "<div class='" + strClassName + "Functions'><table class='" + strClassName + "Functions'>[TABLE0ROWS]</table></div>";
 			let strTable1 = "<div class='" + strClassName + "Div1'><table class='" + strClassName + "Table1'>[TABLE1ROWS]</table></div>";
 			let strTable2 = "<div class='" + strClassName + "Div2'><table class='" + strClassName + "Table2'>[TABLE2ROWS]</table></div>";
-			let strCSS = "<style>." + strClassName + "Form{float: left;}." + strClassName + "Div1{float: left;}." + strClassName + "Div2{float: left;} ." + strClassName + "Buttons { width: 50px;} #" + strClassName + "Answer {width: 216px; }</style>";
+			let strCSS = "<style>." + strClassName + "Form{float: left;}." + strClassName + "Div1{float: left;}." + strClassName + "Div2{float: left;} ." + strClassName + "Buttons { width: 50px;} #" + strClassName + "Answer { text-align: right; width: 216px; }</style>";
 			let strTable0Rows = "";
 			let strTable1Rows = "";
 			let strTable2Rows = "";
@@ -94,7 +94,7 @@
 			let objMyCalculator = this;
 			
 			//
-			// EQUAL KEYS
+			// EQUALS KEY
 			//
 			if (strValue === "="){
 				if(strCombinedValue != ""){
@@ -139,6 +139,16 @@
 				if(strCombinedValue != ""){
 					objMyCalculator.arrCalculations.push(strCombinedValue);
 				}
+				
+				// if the last key pressed was an operator the pop it off the array
+				if (strLastOperator !== "="){
+					if (objMyCalculator.arrOperators.indexOf(strLastOperator) >= 0){ 
+					alert("pop " + strLastOperator)
+						objMyCalculator.arrCalculations.pop();
+					}
+				}
+				
+				
 				objMyCalculator.arrCalculations.push(strValue);
 				strCombinedValue = "";
 			//
@@ -148,15 +158,21 @@
 			//}else if (objMyCalculator.arrFunctions.indexOf(strValue) >= 0){ 
 				// to do
 			}else{
+				//
+				// NUMBER KEYS
+				//
+				//
 				
 				// this is a new formula, lets clear the array and text box
 				if (strLastOperator == "="){ 
 				    objMyCalculator.arrCalculations = [];
-					document.getElementById(strClassName + "Answer").value = "";
+					//document.getElementById(strClassName + "Answer").value = "0";
 				}
-				strCombinedValue += strValue;
 				
+				strCombinedValue += strValue;
+				document.getElementById(strClassName + "Answer").value = strCombinedValue;
 			}
+			
 			strLastOperator = strValue;  
 		}
 		
@@ -185,6 +201,7 @@
 			// to do check is classname is passed
 			objMyCalculator.arrInputs = document.getElementsByClassName(objMyCalculator.strButtonClassName);
 			objMyCalculator.addListeners();
+			document.getElementById(strClassName + "Answer").value = "0";
 			
 			
 		}
@@ -201,7 +218,7 @@
 	
 	
 	
-	//
+//
 //
 //
 //
