@@ -143,7 +143,6 @@
 				// if the last key pressed was an operator the pop it off the array
 				if (strLastOperator !== "="){
 					if (objMyCalculator.arrOperators.indexOf(strLastOperator) >= 0){ 
-					alert("pop " + strLastOperator)
 						objMyCalculator.arrCalculations.pop();
 					}
 				}
