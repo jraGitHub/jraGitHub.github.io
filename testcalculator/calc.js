@@ -122,7 +122,7 @@
 					}
 				}		
 				// round to nearest tenth
-				objMyCalculator.setDisplay((Math.round(10*numTheAnswer)/10));
+				objMyCalculator.setDisplay((Math.round(100*numTheAnswer)/100));
 				//document.getElementById(strClassName + "Answer").value = numTheAnswer;
 
 				numTheAnswer = 0;
