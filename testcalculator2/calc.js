@@ -153,7 +153,7 @@
 				
 				// handle the display of the first -
 				if (strValue === "-" && strLastOperator === ""){
-					;
+					objMyCalculator.setDisplay(strValue);
 				}
 				
 			//
