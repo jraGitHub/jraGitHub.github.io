@@ -122,7 +122,8 @@
 					}
 				}		
 				
-				document.getElementById(strClassName + "Answer").value = numTheAnswer;				
+				objMyCalculator.setDisplay(numTheAnswer);
+				//document.getElementById(strClassName + "Answer").value = numTheAnswer;
 
 				numTheAnswer = 0;
 				strCombinedValue = "";
@@ -150,6 +151,11 @@
 				objMyCalculator.arrCalculations.push(strValue);
 				strCombinedValue = "";
 				
+				// handle the display of the first -
+				if (strValue === "-" && strLastOperator === ""){
+					;
+				}
+				
 			//
 			// FUNCTION KEYS
 			//
@@ -169,10 +175,15 @@
 				}
 				
 				strCombinedValue += strValue;
-				document.getElementById(strClassName + "Answer").value = strCombinedValue;
+				objMyCalculator.setDisplay(strCombinedValue);
+				//document.getElementById(strClassName + "Answer").value = strCombinedValue;
 			}
 			
 			strLastOperator = strValue;  
+		}
+		
+		obj.setDisplay = function(strText){
+			document.getElementById(strClassName + "Answer").value = strText;			
 		}
 		
 		//
@@ -199,7 +210,8 @@
 			objMyCalculator.build();
 			objMyCalculator.arrInputs = document.getElementsByClassName(objMyCalculator.strButtonClassName);
 			objMyCalculator.addListeners();
-			document.getElementById(strClassName + "Answer").value = "0";			
+			objMyCalculator.setDisplay("0");
+			//document.getElementById(strClassName + "Answer").value = "0";
 			
 		}
 		
