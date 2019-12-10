@@ -81,7 +81,7 @@
 			strTable1 = strTable1.replace("[TABLE1ROWS]", strTable1Rows);
 			strTable2 = strTable2.replace("[TABLE2ROWS]", strTable2Rows);
 			
-			// to do objMyCalculator.strContainerClassName
+            // write html to page			
 			document.write("<div class='" + strClassName + "Form'>" + strFormula + strAnswer + strTable1 + strTable2 + strCSS + "</div>");
 		}
 		
@@ -197,11 +197,9 @@
 		obj.init = function(){
 			let objMyCalculator = this;
 			objMyCalculator.build();
-			// to do check is classname is passed
 			objMyCalculator.arrInputs = document.getElementsByClassName(objMyCalculator.strButtonClassName);
 			objMyCalculator.addListeners();
-			document.getElementById(strClassName + "Answer").value = "0";
-			
+			document.getElementById(strClassName + "Answer").value = "0";			
 			
 		}
 		
