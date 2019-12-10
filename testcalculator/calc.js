@@ -166,7 +166,6 @@
 				// this is a new formula, lets clear the array and text box
 				if (strLastOperator == "="){ 
 				    objMyCalculator.arrCalculations = [];
-					//document.getElementById(strClassName + "Answer").value = "0";
 				}
 				
 				strCombinedValue += strValue;
@@ -217,34 +216,4 @@
 	
 	
 	
-	
-//
-//
-//
-//
-
-	function myClassObject(optStrClassName, optStrContainerClassName){
-		let obj = new Object();
-        obj.version = "1.00 - 12/9/19"
-
-		obj.helloWorld = function(){
-			let objMyCalculator = this;
-			//alert('Hello!  version: ' + objMyCalculator.version);
-		}
-        				
-		//
-		//  init
-		//
-		obj.init = function(){
-			let objMyCalculator = this;
-			// do some init stuff
-		}	
-		
-		obj.init();
-		return obj;
-	}
-
-    
-	var obj = myClassObject();
-	obj.helloWorld();
 	
