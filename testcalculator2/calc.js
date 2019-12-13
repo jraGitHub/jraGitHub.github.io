@@ -143,7 +143,7 @@
 				}		
 				
 				// round to nearest tenth
-				objMyCalculator.setDisplay((Math.round(100*numTheAnswer)/100));
+				objMyCalculator.setDisplay((Math.round(100 * numTheAnswer) / 100));
 				
 				numTheAnswer = 0;
 				strCombinedValue = "";
@@ -198,18 +198,27 @@
 				//
 				//
 				
-				// this is a new formula, lets clear the array and text box
-				if (strLastOperator == "="){ 
-				    objMyCalculator.arrCalculations = [];
-				}
+				let bHasDecimal = strCombinedValue.indexOf(".");
+				let bIsDecimal = strValue.indexOf(".");
 				
-				strCombinedValue += strValue;
-				if(bIsNegativeStart === true){
-					strCombinedValue = "-" + strCombinedValue;	
-					bIsNegativeStart = false;
-					bRemoveNegativeFromStart = true;
+				if(bHasDecimal && bIsDecimal){
+					// ignore
+				}else{				
+								
+					// this is a new formula, lets clear the array and text box
+					if (strLastOperator == "="){ 
+						objMyCalculator.arrCalculations = [];
+					}
+					
+					strCombinedValue += strValue;
+					if(bIsNegativeStart === true){
+						strCombinedValue = "-" + strCombinedValue;	
+						bIsNegativeStart = false;
+						bRemoveNegativeFromStart = true;
+					}
+					
+					objMyCalculator.setDisplay(strCombinedValue);
 				}
-				objMyCalculator.setDisplay(strCombinedValue);
 				//document.getElementById(strClassName + "Answer").value = strCombinedValue;
 			}
 			
