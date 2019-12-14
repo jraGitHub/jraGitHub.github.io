@@ -9,7 +9,8 @@
 		let strCombinedValue = "";
 		let numTheAnswer = "";
 		let strLastOperator = "";
-		let bIsNegativeStart = false;
+		let bIsNegativeStart = false; // for temporarily showing the - atthe beggining of the formula
+		let bIsDecimalStart = false;	 // for showing the 0 before the . in the beginning of the formula	
 		let bRemoveNegativeFromStart = false;
 		
 		
@@ -106,6 +107,8 @@
 		obj.appendToFormulaArray = function(strValue){
 			let objMyCalculator = this;
 			
+			let bIsFirstFormulaEntry = (strLastOperator === "");
+			
 			//
 			// EQUALS KEY
 			//
@@ -119,8 +122,10 @@
 					
 					let arrItem = objMyCalculator.arrCalculations[x];					
 					let bIsNum = !isNaN(arrItem);
-					
-					
+				// to do,  rounding for /*	
+				// round to nearest tenth
+				//objMyCalculator.setDisplay((Math.round(100 * numTheAnswer) / 100));
+				
 					
 					if(bIsNum){
 						if(strCurrentOperator != ""){
@@ -133,7 +138,7 @@
 						}
 					}else{
 						
-						if(x === 0 && bRemoveNegativeFromStart == true){
+						if(x === 0 && bRemoveNegativeFromStart === true){
 							// ignore first -
 						}else{
 							strCurrentOperator = arrItem;
@@ -142,8 +147,7 @@
 					}
 				}		
 				
-				// round to nearest tenth
-				objMyCalculator.setDisplay((Math.round(100 * numTheAnswer) / 100));
+				objMyCalculator.setDisplay(numTheAnswer);
 				
 				numTheAnswer = 0;
 				strCombinedValue = "";
@@ -174,7 +178,7 @@
 				strCombinedValue = "";
 				
 				// handle the display of the first -
-				if (strValue === "-" && strLastOperator === ""){
+				if (strValue === "-" && bIsFirstFormulaEntry){
 					bIsNegativeStart = true;
 					objMyCalculator.setDisplay(strValue);
 				}
@@ -186,7 +190,13 @@
 			}else if (objMyCalculator.arrFunctions.indexOf(strValue) >= 0){ 
 				
 				if (strValue === "<<"){
+					
 				}else if (strValue === "CE"){
+					//bRemoveNegativeFromStart = false;
+					strCombinedValue = "";
+					objMyCalculator.setDisplay("0");
+					
+				}else if (strValue === "C"){
 					objMyCalculator.arrCalculations = [];
 					objMyCalculator.setDisplay("0");
 					strCombinedValue = "";
@@ -198,23 +208,34 @@
 				//
 				//
 				
-				let bHasDecimal = strCombinedValue.indexOf(".");
-				let bIsDecimal = strValue.indexOf(".");
+				let bIsZeroFirst = (strCombinedValue.substr(0,1) === "0");
+				let bHasDecimal = (strCombinedValue.indexOf(".") >= 0);				
+				
+				let bIsDecimal = (strValue.indexOf(".") >= 0);
 				
 				if(bHasDecimal && bIsDecimal){
-					// ignore
-				}else{				
+					// ignore 2nd decimal
+				}else{
+					
+					// handle the display of the first decimal by prepending a zero
+					if (bIsDecimal && bIsFirstFormulaEntry){
+						bIsDecimalStart = true;
+					}
 								
 					// this is a new formula, lets clear the array and text box
-					if (strLastOperator == "="){ 
+					if (strLastOperator === "="){ 
 						objMyCalculator.arrCalculations = [];
 					}
 					
 					strCombinedValue += strValue;
+					
 					if(bIsNegativeStart === true){
-						strCombinedValue = "-" + strCombinedValue;	
+						strCombinedValue = "-" + strCombinedValue;
 						bIsNegativeStart = false;
 						bRemoveNegativeFromStart = true;
+						
+					}else if(bIsDecimalStart === true && bIsZeroFirst === false){					
+						strCombinedValue = "0" + strCombinedValue;						
 					}
 					
 					objMyCalculator.setDisplay(strCombinedValue);
