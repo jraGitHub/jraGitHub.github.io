@@ -5,6 +5,7 @@
 
 	function myCalculator(optStrClassName, optStrContainerClassName){
 		let obj = new Object();
+		const language = navigator.language || 'en-US';
 		let strClassName = optStrClassName || "myCalculator";
 		let strCombinedValue = "";
 		let numTheAnswer = "";
@@ -22,6 +23,10 @@
 		obj.arrOperators = ["X", "/", "-", "+", "="];
 		obj.arrNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "."];
 
+		obj.add = function(n1, n2){ return n1 + n2; }
+		obj.subtract = function(n1, n2){ return n1 - n2; }
+		obj.multiply = function(n1, n2){ return n1 * n2; }
+		obj.divide = function(n1, n2){ return n1 / n2; }
 
 		//
 		// Build Calculator HTML
@@ -99,7 +104,19 @@
 			document.write("<div class='" + strClassName + "Form'>" + strFormula + strAnswer + strTable1 + strTable2 + strTable3 + strCSS + "</div>");
 		}
 		
-		
+		obj.calculate = function(o1, n1, n2){
+			let objMyCalculator = this;
+			switch(o1){
+				case "+":
+					return objMyCalculator.add(n1, n2);					
+				case "-":
+					return objMyCalculator.subtract(n1, n2);
+				case "*":
+					return objMyCalculator.multiply(n1, n2);
+				case "/":
+					return objMyCalculator.divide(n1, n2);
+			}
+		}
 		//
 		//  appendToFormulaArray
 		//
@@ -122,18 +139,23 @@
 					
 					let arrItem = objMyCalculator.arrCalculations[x];					
 					let bIsNum = !isNaN(arrItem);
-				// to do,  rounding for /*	
-				// round to nearest tenth
-				//objMyCalculator.setDisplay((Math.round(100 * numTheAnswer) / 100));
-				
-					
+										
+    
 					if(bIsNum){
 						if(strCurrentOperator != ""){
-							let strTemp = (numTheAnswer + " " + strCurrentOperator + " " + arrItem);							
-							numTheAnswer = eval(strTemp);
 							
+							numTheAnswer = objMyCalculator.calculate(strCurrentOperator, numTheAnswer, arrItem);
+
+                            // convert floating decimal
+							if(strCurrentOperator == "/" || strCurrentOperator == "*"){
+								numTheAnswer = parseFloat(numTheAnswer).toLocaleString(language, {
+								  useGrouping: true,
+								  maximumFractionDigits: 6
+								})							
+							}
+						
 						}else{
-							numTheAnswer += eval(arrItem);
+							numTheAnswer += Math.abs(arrItem);
 							
 						}
 					}else{
