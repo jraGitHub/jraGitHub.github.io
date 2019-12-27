@@ -5,6 +5,31 @@
     <title>Calculator</title>
   </head>
   <body>
+  
+    <script>
+	
+	function clsProgrammer(){
+		var obj = new Object();
+		obj.name = ""
+		obj.skills = new Object();
+		obj.skills.hasNotepad = false;
+		obj.skills.hasJavaScript = false;
+		obj.skills.hasVisualStudio = false;
+		obj.skills.hasPerl = false;
+		return obj;
+	}
+	
+	let newHire = clsProgrammer();
+	newHire.name = "Beev";
+	
+	let skill = newHire.skills;
+	skill.hasNotepad = true;
+	skill.hasJavaScript = true;
+	
+	
+	alert(newHire.skills.hasJavaScript)
+	
+	</script>
     <script type="text/javascript" src="calc.js"></script>
   </body>
 </html>
