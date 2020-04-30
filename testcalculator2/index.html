@@ -7,7 +7,9 @@
   <body>
   
     <script>
-	
+	//
+	// create a programmer 'class' to hold our data
+	// ** use this 'class' structure for your programming, it's very helpful
 	function clsProgrammer(){
 		var obj = new Object();
 		obj.name = ""
@@ -16,18 +18,33 @@
 		obj.skills.hasJavaScript = false;
 		obj.skills.hasVisualStudio = false;
 		obj.skills.hasPerl = false;
+		
+		obj.init = function(){
+			let objProgrammer = this;  // set this to local variable, (better practice as 'this' references can get jumbled)
+			
+			// intialize the name property
+			objProgrammer.name = "Undefined";
+		}
+		
+		obj.init();
 		return obj;
 	}
 	
+	// do some work....
+	
+	// create new hire
 	let newHire = clsProgrammer();
 	newHire.name = "Beev";
 	
+	// set skills object to a local variable
 	let skill = newHire.skills;
+	// change skills
 	skill.hasNotepad = true;
 	skill.hasJavaScript = true;
 	
-	
-	alert(newHire.skills.hasJavaScript)
+	//
+	// the skills in the newHire object have changed
+	//alert(newHire.skills.hasJavaScript)
 	
 	</script>
     <script type="text/javascript" src="calc.js"></script>
