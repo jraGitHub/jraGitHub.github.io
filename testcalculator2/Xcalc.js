@@ -5,20 +5,28 @@
 
 	function myCalculator(optStrClassName, optStrContainerClassName){
 		let obj = new Object();
+		const language = navigator.language || 'en-US';
 		let strClassName = optStrClassName || "myCalculator";
 		let strCombinedValue = "";
 		let numTheAnswer = "";
 		let strLastOperator = "";
+		let bIsNegativeStart = false; // for temporarily showing the - atthe beggining of the formula
+		let bIsDecimalStart = false;	 // for showing the 0 before the . in the beginning of the formula	
+		let bRemoveNegativeFromStart = false;
 		
 		
 		obj.strButtonClassName = strClassName + "Buttons";
 		obj.strContainerClassName = optStrContainerClassName || "body";
 		obj.arrInputs = null;
 		obj.arrCalculations = [];
-		//obj.arrFunctions = ["C", "CE", "<<", "M+", "M-", "MS"]; // to do later
+		obj.arrFunctions = ["<<", "CE"];//, "C", "M+", "M-", "MS"]; // to do later
 		obj.arrOperators = ["X", "/", "-", "+", "="];
 		obj.arrNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "."];
 
+		obj.add = function(n1, n2){ return n1 + n2; }
+		obj.subtract = function(n1, n2){ return n1 - n2; }
+		obj.multiply = function(n1, n2){ return n1 * n2; }
+		obj.divide = function(n1, n2){ return n1 / n2; }
 
 		//
 		// Build Calculator HTML
@@ -31,10 +39,13 @@
 			let strTable0 = "<div class='" + strClassName + "Functions'><table class='" + strClassName + "Functions'>[TABLE0ROWS]</table></div>";
 			let strTable1 = "<div class='" + strClassName + "Div1'><table class='" + strClassName + "Table1'>[TABLE1ROWS]</table></div>";
 			let strTable2 = "<div class='" + strClassName + "Div2'><table class='" + strClassName + "Table2'>[TABLE2ROWS]</table></div>";
-			let strCSS = "<style>." + strClassName + "Form{float: left;}." + strClassName + "Div1{float: left;}." + strClassName + "Div2{float: left;} ." + strClassName + "Buttons { width: 50px;} #" + strClassName + "Answer { text-align: right; width: 216px; }</style>";
+			let strTable3 = "<div class='" + strClassName + "Div3'><table class='" + strClassName + "Table3'>[TABLE3ROWS]</table></div>";
+			let strCSS = "<style>." + strClassName + "Form{float: left;}." + strClassName + "Div1{float: left;}." + strClassName + "Div2{float: left;}." + strClassName + "Div3{float: left;} ." + strClassName + "Buttons { width: 50px;} #" + strClassName + "Answer { text-align: right; width: 273px; }</style>";
 			let strTable0Rows = "";
 			let strTable1Rows = "";
 			let strTable2Rows = "";
+			let strTable3Rows = "";
+			
 			
 			
 			let b1 = "<button class='" + strClassName + "Buttons'>";
@@ -77,21 +88,43 @@
 				let o1 = objMyCalculator.arrOperators[x];
 				strTable2Rows += "<tr class='" + strClassName + "Row'><td class='" + strClassName + "Cell'><button class='" + strClassName + "Buttons'>" + o1 + "</button></td></tr>";
 			}
+			for(let x = 0; x < objMyCalculator.arrFunctions.length; x++){
+				let f1 = objMyCalculator.arrFunctions[x];
+				strTable3Rows += "<tr class='" + strClassName + "Row'><td class='" + strClassName + "Cell'><button class='" + strClassName + "Buttons'>" + f1 + "</button></td></tr>";
+			}
+			
 			
 			strTable1 = strTable1.replace("[TABLE1ROWS]", strTable1Rows);
 			strTable2 = strTable2.replace("[TABLE2ROWS]", strTable2Rows);
+			strTable3 = strTable3.replace("[TABLE3ROWS]", strTable3Rows);
+			
+			
 			
             // write html to page			
-			document.write("<div class='" + strClassName + "Form'>" + strFormula + strAnswer + strTable1 + strTable2 + strCSS + "</div>");
+			document.write("<div class='" + strClassName + "Form'>" + strFormula + strAnswer + strTable1 + strTable2 + strTable3 + strCSS + "</div>");
 		}
 		
-		
+		obj.calculate = function(o1, n1, n2){
+			let objMyCalculator = this;
+			switch(o1){
+				case "+":
+					return objMyCalculator.add(n1, n2);					
+				case "-":
+					return objMyCalculator.subtract(n1, n2);
+				case "*":
+					return objMyCalculator.multiply(n1, n2);
+				case "/":
+					return objMyCalculator.divide(n1, n2);
+			}
+		}
 		//
 		//  appendToFormulaArray
 		//
 		//
 		obj.appendToFormulaArray = function(strValue){
 			let objMyCalculator = this;
+			
+			let bIsFirstFormulaEntry = (strLastOperator === "");
 			
 			//
 			// EQUALS KEY
@@ -106,25 +139,38 @@
 					
 					let arrItem = objMyCalculator.arrCalculations[x];					
 					let bIsNum = !isNaN(arrItem);
-					
+										
+    
 					if(bIsNum){
 						if(strCurrentOperator != ""){
-							let strTemp = (numTheAnswer + " " + strCurrentOperator + " " + arrItem);							
-							numTheAnswer = eval(strTemp);
 							
+							numTheAnswer = objMyCalculator.calculate(strCurrentOperator, numTheAnswer, arrItem);
+
+                            // convert floating decimal
+							if(strCurrentOperator == "/" || strCurrentOperator == "*"){
+								numTheAnswer = parseFloat(numTheAnswer).toLocaleString(language, {
+								  useGrouping: true,
+								  maximumFractionDigits: 6
+								})							
+							}
+						
 						}else{
-							numTheAnswer += eval(arrItem);
+							numTheAnswer += Math.abs(arrItem);
 							
 						}
 					}else{
-						strCurrentOperator = arrItem;
+						
+						if(x === 0 && bRemoveNegativeFromStart === true){
+							// ignore first -
+						}else{
+							strCurrentOperator = arrItem;
+						}
 						
 					}
 				}		
-				// round to nearest tenth
-				objMyCalculator.setDisplay((Math.round(100*numTheAnswer)/100));
-				//document.getElementById(strClassName + "Answer").value = numTheAnswer;
-
+				
+				objMyCalculator.setDisplay(numTheAnswer);
+				
 				numTheAnswer = 0;
 				strCombinedValue = "";
 
@@ -132,7 +178,9 @@
 			//  OPERATOR KEYS
 			//
 			//
-			}else if (objMyCalculator.arrOperators.indexOf(strValue) >= 0){ 
+			}else if (objMyCalculator.arrOperators.indexOf(strValue) >= 0){
+				bIsNegativeStart = false; 				
+				
 				// design flaw
 				if (strValue === "X"){
 					strValue = "*";
@@ -152,16 +200,29 @@
 				strCombinedValue = "";
 				
 				// handle the display of the first -
-				if (strValue === "-" && strLastOperator === ""){
-					;
+				if (strValue === "-" && bIsFirstFormulaEntry){
+					bIsNegativeStart = true;
+					objMyCalculator.setDisplay(strValue);
 				}
 				
 			//
 			// FUNCTION KEYS
 			//
 			//
-			//}else if (objMyCalculator.arrFunctions.indexOf(strValue) >= 0){ 
-				// to do
+			}else if (objMyCalculator.arrFunctions.indexOf(strValue) >= 0){ 
+				
+				if (strValue === "<<"){
+					
+				}else if (strValue === "CE"){
+					//bRemoveNegativeFromStart = false;
+					strCombinedValue = "";
+					objMyCalculator.setDisplay("0");
+					
+				}else if (strValue === "C"){
+					objMyCalculator.arrCalculations = [];
+					objMyCalculator.setDisplay("0");
+					strCombinedValue = "";
+				}
 				
 			}else{
 				//
@@ -169,13 +230,38 @@
 				//
 				//
 				
-				// this is a new formula, lets clear the array and text box
-				if (strLastOperator == "="){ 
-				    objMyCalculator.arrCalculations = [];
-				}
+				let bIsZeroFirst = (strCombinedValue.substr(0,1) === "0");
+				let bHasDecimal = (strCombinedValue.indexOf(".") >= 0);				
 				
-				strCombinedValue += strValue;
-				objMyCalculator.setDisplay(strCombinedValue);
+				let bIsDecimal = (strValue.indexOf(".") >= 0);
+				
+				if(bHasDecimal && bIsDecimal){
+					// ignore 2nd decimal
+				}else{
+					
+					// handle the display of the first decimal by prepending a zero
+					if (bIsDecimal && bIsFirstFormulaEntry){
+						bIsDecimalStart = true;
+					}
+								
+					// this is a new formula, lets clear the array and text box
+					if (strLastOperator === "="){ 
+						objMyCalculator.arrCalculations = [];
+					}
+					
+					strCombinedValue += strValue;
+					
+					if(bIsNegativeStart === true){
+						strCombinedValue = "-" + strCombinedValue;
+						bIsNegativeStart = false;
+						bRemoveNegativeFromStart = true;
+						
+					}else if(bIsDecimalStart === true && bIsZeroFirst === false){					
+						strCombinedValue = "0" + strCombinedValue;						
+					}
+					
+					objMyCalculator.setDisplay(strCombinedValue);
+				}
 				//document.getElementById(strClassName + "Answer").value = strCombinedValue;
 			}
 			
