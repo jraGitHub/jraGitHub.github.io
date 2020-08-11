@@ -4,7 +4,7 @@
 		"PowerUpDelay":60,
 		"PowerDownDelay":1,
 		"Opacity":0,
-		"DecayTime":24,
+		"DecayTime":36,
 		"MaxNumPerTribe":1
 	}
 }
