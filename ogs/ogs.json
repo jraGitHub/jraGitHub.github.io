@@ -1,6 +1,6 @@
 {  
 	"OGS":{
-		"MaxShieldRange":60,
+		"MaxShieldRange":40,
 		"PowerUpDelay":60,
 		"PowerDownDelay":1,
 		"Opacity":0,
